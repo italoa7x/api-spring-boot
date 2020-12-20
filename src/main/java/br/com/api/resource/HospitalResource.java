@@ -12,13 +12,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.api.domain.Hospital;
-import br.com.api.domain.Ocupacao;
 import br.com.api.domain.dto.OcupacaoDTO;
 import br.com.api.service.HospitalService;
 import io.swagger.annotations.ApiResponse;
@@ -58,28 +56,6 @@ public class HospitalResource implements Serializable {
 	@GetMapping
 	public List<Hospital> listarHospitais() {
 		return this.hospitalService.listarHospitais();
-	}
-
-	/**
-	 * Rota de insercao de ocupacao
-	 */
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Adiciona a nova ocupacação do hospital e retorna a lista completa"),
-			@ApiResponse(code = 400, message = "Retorna um erro. A ocupação foi inválida"), })
-	@PutMapping("nova-ocupacao/{id}")
-	public ResponseEntity<List<OcupacaoDTO>> atualizarOcupacao(@RequestBody Ocupacao ocupacao, @PathVariable Integer id) {
-		Hospital hospital = this.hospitalService.buscarPorID(id);
-
-		if (ocupacao.getOcupacao() < 0 || ocupacao.getOcupacao() > 100) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		} else if (hospital != null) {
-			/*
-			 * Adiciona a nova ocupacao que irá conter esse hospital
-			 */
-			List<OcupacaoDTO> ocupacoesSalvas = this.hospitalService.atualizarOcupacao(id, ocupacao);
-			return ResponseEntity.status(HttpStatus.OK).body(ocupacoesSalvas);
-		}else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
 	}
 
 	/**

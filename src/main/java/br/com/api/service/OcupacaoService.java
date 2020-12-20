@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.api.domain.Hospital;
-import br.com.api.domain.MediaOcupacao;
 import br.com.api.domain.Ocupacao;
 import br.com.api.domain.dto.OcupacaoDTO;
 import br.com.api.repository.HospitalRepository;
@@ -32,7 +31,7 @@ public class OcupacaoService {
 	/**
 	 * calcula a média de hospital que possuem ocupacao superior a 90%
 	 */
-	public MediaOcupacao hospitaisComOcupacaoSuperiorANoventa() {
+	public double hospitaisComOcupacaoSuperiorANoventa() {
 		List<Hospital> hospitais = this.hospitalRepository.findAll();
 
 		List<Hospital> hospitaisComOcupacaoMaiorQueNoventa = new ArrayList<Hospital>();
@@ -51,9 +50,7 @@ public class OcupacaoService {
 			}
 			double media = hospitaisComOcupacaoMaiorQueNoventa.size() / this.buscaHospitaisQuePossuemOcupacao();
 
-			MediaOcupacao mediaOcupada = new MediaOcupacao(hospitaisComOcupacaoMaiorQueNoventa, media);
-
-			return mediaOcupada;
+			return media;
 		} else {
 			throw new RuntimeException("Não existe hospitais cadastrados");
 		}
@@ -62,7 +59,7 @@ public class OcupacaoService {
 	/**
 	 * calcula a média de hospital que possuem ocupacao inferior a 90%
 	 */
-	public MediaOcupacao hospitaisComOcupacaoInferiorANoventa() {
+	public double hospitaisComOcupacaoInferiorANoventa() {
 		List<Hospital> hospitais = this.hospitalRepository.findAll();
 
 		List<Hospital> hospitaisComOcupacaoMenorQueNoventa = new ArrayList<Hospital>();
@@ -79,27 +76,24 @@ public class OcupacaoService {
 					}
 				}
 			}
-			
+
 			double media = hospitaisComOcupacaoMenorQueNoventa.size() / this.buscaHospitaisQuePossuemOcupacao();
 
-			
-			MediaOcupacao mediaOcupada = new MediaOcupacao(hospitaisComOcupacaoMenorQueNoventa, media);
-
-			return mediaOcupada;
+			return media;
 		} else {
 			throw new RuntimeException("Não existe hospitais cadastrados");
 		}
 	}
-	
-	public int buscaHospitaisQuePossuemOcupacao(){
+
+	public int buscaHospitaisQuePossuemOcupacao() {
 		List<Hospital> hospitais = this.hospitalRepository.findAll();
 		int total = 0;
 		/*
 		 * verifica quais hospitais possuem alguma ocupacao
 		 */
-		for(Hospital h : hospitais) {
-			if(h.getOcupacao().size() > 0) {
-				total ++;
+		for (Hospital h : hospitais) {
+			if (h.getOcupacao().size() > 0) {
+				total++;
 			}
 		}
 		return total;
