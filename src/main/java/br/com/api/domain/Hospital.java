@@ -30,8 +30,9 @@ public class Hospital implements Serializable {
 	 * O cnpj é unico por empresa Size: O campo de CNPJ podera ser com ou sem pont e
 	 * barra
 	 */
-	@Column(unique = true, nullable = false)
+	@Column(unique = true)
 	@Size(min = 14, max = 18)
+	@NotNull
 	private String cnpj;
 
 	/**
